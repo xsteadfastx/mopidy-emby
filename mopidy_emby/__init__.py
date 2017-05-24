@@ -28,7 +28,7 @@ class Extension(ext.Extension):
         schema['password'] = config.Secret()
         schema['hostname'] = config.String()
         schema['port'] = config.Port()
-        
+
         return schema
 
     def setup(self, registry):
