@@ -29,6 +29,7 @@ class EmbyHandler(object):
         self.username = config['emby']['username']
         self.password = config['emby']['password']
         self.proxy = config['proxy']
+        self.album_format = config['emby'].get('album_format', "{Name}")
         self.user_id = config['emby'].get('user_id', False)
 
         # create authentication headers
@@ -216,7 +217,7 @@ class EmbyHandler(object):
         return [
             models.Ref.album(
                 uri='emby:album:{}'.format(i['Id']),
-                name=i['Name']
+                name=self.album_format.format(**i)
             )
             for i in albums
             if i
