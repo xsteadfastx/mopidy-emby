@@ -44,6 +44,9 @@ class EmbyHandler(object):
         """
         url = self.api_url('/Users/Public')
         r = requests.get(url)
+        if r.status_code != 200:
+            raise Exception("Incorrect response from request '{}' (Status "
+                "code: {})!".format(url, r.status_code))
         user = [i for i in r.json() if i['Name'] == self.username]
 
         if user:
