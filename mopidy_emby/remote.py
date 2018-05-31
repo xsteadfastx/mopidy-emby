@@ -54,7 +54,8 @@ class EmbyHandler(object):
                 user[0]['Id']))
             return user
         else:
-            raise Exception('No Emby user {} found'.format(self.username))
+            raise Exception('No Emby user {} found (Perhaps your user is '
+                'hidden).'.format(self.username))
 
     def _get_token(self):
         """Return token for a user.
