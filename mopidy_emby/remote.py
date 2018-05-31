@@ -29,6 +29,7 @@ class EmbyHandler(object):
         self.username = config['emby']['username']
         self.password = config['emby']['password']
         self.proxy = config['proxy']
+        self.album_format = config['emby'].get('album_format', "{Name}")
         self.user_id = config['emby'].get('user_id', False)
 
         # create authentication headers
@@ -44,12 +45,18 @@ class EmbyHandler(object):
         """
         url = self.api_url('/Users/Public')
         r = requests.get(url)
+        if r.status_code != 200:
+            raise Exception("Incorrect response from request '{}' (Status "
+                "code: {})!".format(url, r.status_code))
         user = [i for i in r.json() if i['Name'] == self.username]
 
         if user:
+            logger.info("ID of Emby User to put in config file: {}.".format(
+                user[0]['Id']))
             return user
         else:
-            raise Exception('No Emby user {} found'.format(self.username))
+            raise Exception('No Emby user {} found (Perhaps your user is '
+                'hidden).'.format(self.username))
 
     def _get_token(self):
         """Return token for a user.
@@ -210,7 +217,7 @@ class EmbyHandler(object):
         return [
             models.Ref.album(
                 uri='emby:album:{}'.format(i['Id']),
-                name=i['Name']
+                name=self.album_format.format(**i)
             )
             for i in albums
             if i
