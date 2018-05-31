@@ -50,6 +50,8 @@ class EmbyHandler(object):
         user = [i for i in r.json() if i['Name'] == self.username]
 
         if user:
+            logger.info("ID of Emby User to put in config file: {}.".format(
+                user[0]['Id']))
             return user
         else:
             raise Exception('No Emby user {} found'.format(self.username))
