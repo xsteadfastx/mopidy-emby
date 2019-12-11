@@ -66,9 +66,8 @@ class EmbyHandler(object):
         """
         return {
             'username': self.username,
+            'pw': self.password.encode('utf-8'),
             'password': hashlib.sha1(
-                self.password.encode('utf-8')).hexdigest(),
-            'passwordMd5': hashlib.md5(
                 self.password.encode('utf-8')).hexdigest()
         }
 
@@ -78,7 +77,7 @@ class EmbyHandler(object):
         headers = {}
 
         authorization = (
-            'MediaBrowser UserId="{user_id}", '
+            'Emby UserId="{user_id}", '
             'Client="other", '
             'Device="mopidy", '
             'DeviceId="mopidy", '
